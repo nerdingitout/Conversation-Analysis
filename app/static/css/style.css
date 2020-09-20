@@ -1,0 +1,37 @@
+body{
+    background-color: #f1f1f1;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.rag-red {
+    background-color: lightcoral !important;
+  }
+.rag-green {
+    background-color: lightgreen !important;
+  }
+.rag-amber {
+    background-color: lightsalmon !important;
+  }
+  
+.rag-red-outer .rag-element {
+    background-color: lightcoral;
+  }
+  
+.rag-green-outer .rag-element {
+    background-color: lightgreen !important;
+  }
+  
+.rag-amber-outer .rag-element {
+    background-color: lightsalmon;
+  }
+  
+
+.navbar-custom { 
+    background-color: #000000 !important; 
+}
+
+.navbar-custom .navbar-brand, 
+        .navbar-custom .navbar-text { 
+            color: #ffffff!important; 
+        } 

@@ -1,0 +1,365 @@
+{% extends "public/templates/public_template.html" %}
+
+{% block title %} Jinja {% endblock %}
+
+{% block main %}
+
+<div class="container " style="margin-right: 420px;"> 
+
+    <div style="margin-top:50px;"  class="row">
+
+        <div  class="col-sm">
+            <h1 style="margin-bottom: 50px;">Transcript</h1>
+        {% for item in d %}
+            <p >  <span style="font-weight:bold">Customer: </span> {{ item.customer }} </p> 
+            <p >  <span style="font-weight:bold">Agent: </span> {{ item.agent }} </p> 
+         {% endfor %}   
+        </div>
+      </div> 
+
+    <div style="margin-top: 50px;" class="row">
+       
+        <div class="col-sm-6">
+            <h1>Insights</h1>
+
+            <canvas id="myChart" width="430" height="430" style="margin-top:50px ;"  ></canvas>
+        </div>   
+        <div style=" margin-top:103px;" class="col-sm-6">
+            <canvas id="myChart2" width="840" height="420"></canvas>
+            
+            
+         </div>   
+        </div>
+
+        <div style="margin-top:80px; margin-bottom:50px;"  class="row">
+            <div class="col-sm">
+            <div  id="myGrid" style="width:1500px ;"  class="ag-theme-alpine"></div>
+            </div>
+          </div>  
+
+           
+
+    </div> 
+
+   
+
+
+    
+
+
+
+<script>
+    // Global parameters:
+    // do not resize the chart canvas when its container does (keep at 600x400px)
+    Chart.defaults.global.responsive = false;
+    // get chart canvas
+    var ctx = document.getElementById("myChart").getContext("2d");
+
+    // define the chart data
+    var data = {
+        labels: [{% for item in labels %}
+    "{{item}}",
+        {% endfor %}],
+
+    datasets: [{
+        label: '{{ legend }}',
+        fill: true,
+        lineTension: 0.1,
+        //backgroundColor: ['green', 'orange'],
+        backgroundColor: [
+    'rgba(0, 99, 132, 0.6)',
+    
+    'rgba(240, 99, 132, 0.6)'
+  ],
+  borderColor: "#f1f1f1"
+  ,
+       /* borderColor: [
+            'rgba(0, 99, 132, 1)',
+            
+            'rgba(120, 99, 132, 1)',
+
+        ],*/
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "black",
+        pointHoverBorderColor: "white",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: [{% for item in values %}
+                    {{ item }},
+    {% endfor %}],
+        spanGaps: false
+      }]
+    }
+    var chartOptions = {
+        title: {
+            display: true,
+            text: 'Review vs. Correct Pie Chart'
+        },
+   
+   
+   
+ }; 
+
+
+    
+
+    // create the chart using the chart canvas
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        options: chartOptions,
+        data: data
+    });
+</script>
+
+<script>
+
+    Chart.defaults.global.responsive = false;
+
+    var simData = {
+        label: 'Similarity(%)',
+        data: [{% for item in values2 %}
+    {{ item }},
+    {% endfor %}],
+
+    backgroundColor: [
+    'rgba(0, 99, 132, 0.6)',
+    'rgba(30, 99, 132, 0.6)',
+    'rgba(60, 99, 132, 0.6)',
+    'rgba(90, 99, 132, 0.6)',
+    'rgba(120, 99, 132, 0.6)',
+    'rgba(150, 99, 132, 0.6)',
+    'rgba(180, 99, 132, 0.6)',
+    'rgba(210, 99, 132, 0.6)',
+    'rgba(240, 99, 132, 0.6)'
+  ],
+  borderColor: [
+    'rgba(0, 99, 132, 1)',
+    'rgba(30, 99, 132, 1)',
+    'rgba(60, 99, 132, 1)',
+    'rgba(90, 99, 132, 1)',
+    'rgba(120, 99, 132, 1)',
+    'rgba(150, 99, 132, 1)',
+    'rgba(180, 99, 132, 1)',
+    'rgba(210, 99, 132, 1)',
+    'rgba(240, 99, 132, 1)'
+  ],
+            borderWidth: 2,
+            hoverBorderWidth: 0
+};
+
+    var chartOptions = {
+        
+        elements: {
+            rectangle: {
+                borderSkipped: 'left',
+            }
+        },
+        title: {
+            display: true,
+            text: 'Similarity Percentage per Intent'
+        }
+    };
+
+
+    var ctx = document.getElementById("myChart2").getContext("2d");
+
+    var barChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        options: chartOptions,
+        data: {
+            labels: [{% for item in intents %}
+    "{{ item }}",
+        {% endfor %}],
+    datasets: [simData]
+   
+} 
+});
+
+</script>
+
+
+
+<script>
+
+    Chart.defaults.global.responsive = false;
+
+    var chartData = {
+        label: 'Total',
+        data: [{% for item in values %}{{ item }},{% endfor %}0],
+
+    backgroundColor: [
+    'rgba(0, 99, 132, 0.6)',
+    
+    'rgba(240, 99, 132, 0.6)'
+  ],
+  borderColor: [
+    'rgba(0, 99, 132, 1)',
+    'rgba(240, 99, 132, 1)'
+  ],
+            borderWidth: 2,
+            hoverBorderWidth: 0
+};
+
+    var chartOptions = {
+        
+        legend: {
+            display: false
+         },
+
+         title: {
+            display: true,
+            text: 'Review vs. Correct Bar Chart'
+        }
+         
+    };
+
+
+    var ctx = document.getElementById("myChart3").getContext("2d");
+
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        options: chartOptions,
+        data: {
+            labels: [{% for item in labels %}
+    "{{ item }}",
+        {% endfor %}],
+    datasets: [chartData],
+    
+    }
+});
+
+</script>
+
+
+<script>
+
+var ragCellClassRules = {
+  'rag-green-outer': function (params) {
+    return params.value >= 65;
+  },
+  'rag-amber-outer': function (params) {
+    return params.value < 65;
+  },
+ 
+};
+
+
+    // specify the columns
+    var columnDefs = [
+      {headerName: "Customer Intent", field: "customer", resizable: true, width: 300},
+      {headerName: "Agent Response", field: "agent", resizable: true, width: 500},
+      {headerName: "Assistant Response", field: "assistant", resizable: true, width: 500},
+      {headerName: "Agent Words & Entities", field: "agent_words", resizable: true, width: 500},
+      {headerName: "Assistant Words & Entities", field: "assistant_words", resizable: true, width: 500},
+      {headerName: "Agent Misses", field: "missed", resizable: true, width: 350, cellClass: cellClass2},
+      {headerName: "Differences", field: "wrong", resizable: true, width: 200, cellClass: cellClass2},
+      {headerName: "Similarity Score (%)", field: "similarity", resizable: true, valueParser: numberParser, sortable: true, cellClassRules: ragCellClassRules, cellRenderer: ragRenderer},
+      {headerName: "Result", sortable: true, field: "result", resizable: true, width: 90, cellClass: cellClass, 
+     },
+    ];
+
+   
+   var y = [{% for item in d %}
+            {customer: "{{ item.customer }}",
+             agent: "{{ item.agent }}",
+             agent_words: [{% for i in item.agent_words %} "{{ i }}", {% endfor %}],
+             assistant: "{{ item.assistant }}",
+             assistant_words: [{% for i in item.assistant_words %} "{{ i }}", {% endfor %}],
+             missed:  [{% if item.missed|length > 0 %}
+                        {% for i in item.missed %} 
+                            "{{ i }}",
+                        {% endfor %}  
+                      {% else %} 
+                        "No Misses" 
+                      {% endif %}], 
+                 
+             wrong:  [{% if item.wrong|length > 0 %}
+                        {% for i in item.wrong %} 
+                            "{{ i }}",
+                        {% endfor %}  
+                      {% else %} 
+                        "No Differences" 
+                      {% endif %}], 
+             similarity: {{ item.similarity }},
+             result: "{{ item.result }}",
+        
+        
+        },
+
+            {% endfor %}];
+
+
+  function numberParser(params) {
+  var newValue = params.newValue;
+  var valueAsNumber;
+  if (newValue === null || newValue === undefined || newValue === '') {
+    valueAsNumber = null;
+  } else {
+    valueAsNumber = parseFloat(params.newValue);
+  }
+  return valueAsNumber;
+}
+
+var gridOptions = {
+      columnDefs: columnDefs,
+      rowData: y,
+      domLayout: 'autoHeight',
+      animateRows: true,
+      
+
+    };
+
+function cellClass(params) {
+  return params.value === 'correct' ? 'rag-blue' : 'rag-amber';
+}
+
+function cellClass2(params) {
+    if (params.value[0] =="No Misses" || params.value[0] == "No Differences" ){
+        return 'rag-grey'
+    }
+    console.log(params.value);
+
+}
+
+
+
+
+
+function ragRenderer(params) {
+  return '<span class="rag-element">' + params.value + '</span>';
+}
+
+    // let the grid know which columns and what data to use
+    
+
+  // lookup the container we want the Grid to use
+  var eGridDiv = document.getElementById('myGrid');
+
+  // create the grid passing in the div to use together with the columns & data we want to use
+  new agGrid.Grid(eGridDiv, gridOptions);
+
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
