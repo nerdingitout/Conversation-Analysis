@@ -4,7 +4,7 @@ applications:
   timeout: 180
   name: pythonflaskappxwptu20200920
   buildpack: python_buildpack
-  command: python manage.py start 0.0.0.0:$PORT
+  command: python run.py start 0.0.0.0:$PORT
   disk_quota: 1G
   memory: 128MB
   domain: mybluemix.net
